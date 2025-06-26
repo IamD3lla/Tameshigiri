@@ -1,0 +1,26 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Compilar Raylib",
+      "type": "shell",
+      "command": "g++",
+      "args": [
+        "src/main.cpp",
+        "-o",
+        "build/game",
+        "-lraylib",
+        "-lGL",
+        "-lm",
+        "-lpthread",
+        "-ldl",
+        "-lX11",
+        "-lXrandr",
+        "-lXi",
+        "-lXcursor"
+      ],
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": ["$gcc"]
+    }
+  ]
+}
