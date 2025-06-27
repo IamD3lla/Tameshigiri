@@ -1,11 +1,16 @@
-#include "raylib.h"
+#include <raylib.h>
+#include <utils/utils.hpp>
 
 int main() {
-    InitWindow(800, 600, "Raylib + VSCode no Arch");
+    InitWindow(windowDimension[0], windowDimension[1], "Songurai");
     while (!WindowShouldClose()) {
         BeginDrawing();
-        ClearBackground(RAYWHITE);
-        DrawText("Funciona!", 190, 200, 20, RED);
+        ClearBackground(BLACK);
+
+        Texture2D map = LoadTexture("assets/map_placeholder.png");
+
+        DrawTextureEx(map, {0,0}, 0, SCALE, WHITE);
+
         EndDrawing();
     }
     CloseWindow();

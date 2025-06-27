@@ -6,9 +6,11 @@
       "type": "shell",
       "command": "g++",
       "args": [
-        "src/main.cpp",
-        "-o",
-        "build/game",
+        "-std=c++17",
+        "-g",
+        "-I", "${workspaceFolder}/src",               // diretório de headers corretos
+        "${workspaceFolder}/src/main.cpp",            // arquivo fonte com main()
+        "-o", "${workspaceFolder}/build/game",        // executável alvo
         "-lraylib",
         "-lGL",
         "-lm",
@@ -20,7 +22,8 @@
         "-lXcursor"
       ],
       "group": { "kind": "build", "isDefault": true },
-      "problemMatcher": ["$gcc"]
+      "problemMatcher": ["$gcc"],
+      "detail": "Compila com Raylib via g++"
     }
   ]
 }
