@@ -12,15 +12,13 @@ This is a prototype game being made by Otter, the next steps are the following:
 
 ## Build the project
 
-    To build the project, first you need to be in the build directory.
+To build the project, first you need to be in the build directory.
 
-    ```bash
-    cd build
-    ```
+    cd build   
 
-    In the `build` directory, build the project using the following commands:
+In the `build` directory, build the project using the following commands:
 
-    ```bash
-    cmake ..
-    make
-    ```
+```bash
+cmake ..
+make
+```
