@@ -1,8 +1,5 @@
 # Prototype Game
 
-*ATENTION:* The project is with a failure of memory loss, it will crash your pc
-depending of the specifics of it.
-
 This is a prototype game being made by Otter, the next steps are the following:
 
 - [x] Add Map
@@ -10,3 +7,20 @@ This is a prototype game being made by Otter, the next steps are the following:
 - [ ] Add movement
 - [ ] Create basic enemy
 - [ ] Implement base mechanic
+
+# How to use
+
+## Build the project
+
+    To build the project, first you need to be in the build directory.
+
+    ```bash
+    cd build
+    ```
+
+    In the `build` directory, build the project using the following commands:
+
+    ```bash
+    cmake ..
+    make
+    ```
