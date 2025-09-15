@@ -36,7 +36,7 @@ jobs:
         run: exit 1
 
   deploy:
-    needs: lint
+    needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     permissions:
