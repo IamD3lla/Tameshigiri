@@ -1,7 +1,6 @@
 name: Continuous Integration
 
 on:
-  push:
   pull_request:
 
 permissions:
@@ -9,7 +8,7 @@ permissions:
   pull-requests: write      
 
 jobs:
-  lint:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
