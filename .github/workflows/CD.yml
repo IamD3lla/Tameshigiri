@@ -1,0 +1,83 @@
+name: Continuous Delivery
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+  pages: write         # necessário pra deploy do Pages :contentReference[oaicite:3]{index=3}
+  id-token: write       # necessário para verificar identidade se exigido nas políticas de ambiente :contentReference[oaicite:4]{index=4}
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Run C/C++ linter
+        uses: cpp-linter/cpp-linter-action@v2
+        id: linter
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          style: 'file'
+          tidy-checks: ''
+          thread-comments: ${{ github.event_name == 'pull_request' && 'update' }}
+
+      - name: Fail fast if lint fails
+        if: steps.linter.outputs.checks-failed != '0'
+        run: exit 1
+
+  build_and_deploy:
+    needs: lint
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Build (Release)
+        run: |
+          mkdir -p build-release
+          cd build-release
+          cmake -DCMAKE_BUILD_TYPE=Release ..
+          make -j$(nproc)
+        # ajuste o comando de build para seu projeto C++
+
+      - name: Build static assets (para Pages)
+        id: build
+        run: |
+          # Se seu projeto tem conteúdo estático (docs, site, etc),
+          # construa/copie/prepare esse conteúdo em uma pasta, por exemplo `site_static/`
+          mkdir -p site_static
+          cp -r path/to/static_files/* site_static/
+        # ajuste `path/to/static_files` para onde estão seus arquivos estáticos
+
+      - name: Upload Pages Artifact
+        id: deployment
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site_static/     # ou a pasta que você usou para os estáticos
+          # opcional: nome do artefato, retenção etc
+
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_name: ''      # opcional, se quiser nome customizado
+        environment:
+          name: github-pages
+          url: ${{ steps
