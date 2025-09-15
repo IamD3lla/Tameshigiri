@@ -53,7 +53,7 @@ jobs:
           fetch-depth: 0
 
       - name: Instalar Raylib
-        run: sudo apt-get update && sudo apt-get install -y libraylib-dev
+        run: sudo apt-get install -y libraylib-dev
 
       - name: Build (Release)
         run: |
