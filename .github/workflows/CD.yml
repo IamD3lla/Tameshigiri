@@ -9,8 +9,8 @@ on:
 permissions:
   contents: read
   pull-requests: write
-  pages: write         # necessário pra deploy do Pages :contentReference[oaicite:3]{index=3}
-  id-token: write       # necessário para verificar identidade se exigido nas políticas de ambiente :contentReference[oaicite:4]{index=4}
+  pages: write
+  id-token: write
 
 jobs:
   lint:
@@ -43,6 +43,9 @@ jobs:
       contents: read
       pages: write
       id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -55,29 +58,21 @@ jobs:
           cd build-release
           cmake -DCMAKE_BUILD_TYPE=Release ..
           make -j$(nproc)
-        # ajuste o comando de build para seu projeto C++
 
       - name: Build static assets (para Pages)
         id: build
         run: |
-          # Se seu projeto tem conteúdo estático (docs, site, etc),
-          # construa/copie/prepare esse conteúdo em uma pasta, por exemplo `site_static/`
           mkdir -p site_static
           cp -r path/to/static_files/* site_static/
-        # ajuste `path/to/static_files` para onde estão seus arquivos estáticos
 
       - name: Upload Pages Artifact
         id: deployment
         uses: actions/upload-pages-artifact@v3
         with:
-          path: site_static/     # ou a pasta que você usou para os estáticos
-          # opcional: nome do artefato, retenção etc
+          path: site_static/
 
       - name: Deploy to GitHub Pages
         id: deploy
         uses: actions/deploy-pages@v4
         with:
-          artifact_name: ''      # opcional, se quiser nome customizado
-        environment:
-          name: github-pages
-          url: ${{ steps
+          artifact_name: ''
