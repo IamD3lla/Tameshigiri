@@ -13,5 +13,5 @@ Vector2 Player::getScreenPos()
 
 void Player::tick(float deltaTime)
 {
-    DrawRectangle(getScreenPos().x, getScreenPos().y, 50, 100, RED);
+    DrawRectangle(getScreenPos().x, getScreenPos().y, 50, 100, BLUE);
 }
