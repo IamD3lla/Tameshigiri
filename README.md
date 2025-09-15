@@ -8,6 +8,12 @@ This is a prototype game being made by Otter, the next steps are the following:
 - [ ] Create basic enemy
 - [ ] Implement base mechanic
 
+# Future updates
+
+- [ ] Add sprites
+- [ ] Add song
+- [ ] Add menu
+
 # How to use
 
 ## Build the project
