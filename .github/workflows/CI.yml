@@ -4,14 +4,18 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read            
+  pull-requests: write      
+
 jobs:
   lint:
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write   # se quiser que thread-comments funcionem em PR
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0   
 
       - name: Run C/C++ linter
         uses: cpp-linter/cpp-linter-action@v2
@@ -19,8 +23,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          style: 'file'         # usar .clang-format
-          tidy-checks: ''       # usar .clang-tidy
+          style: 'file'
+          tidy-checks: ''
           thread-comments: ${{ github.event_name == 'pull_request' && 'update' }}
 
       - name: Fail fast if lint fails
