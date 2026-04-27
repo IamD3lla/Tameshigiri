@@ -23,6 +23,7 @@ private:
     Vector2 velocity{};
 
     float width, height;
+    float speed{4.f};
 };
 
 #endif

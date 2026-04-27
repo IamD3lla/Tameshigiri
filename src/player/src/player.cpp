@@ -1,4 +1,5 @@
 #include "player.hpp"
+#include "raymath.h"
 
 Player::Player(float windowWidth, float windowHeight)
 {
@@ -13,5 +14,21 @@ Vector2 Player::getScreenPos()
 
 void Player::tick(float deltaTime)
 {
-    DrawRectangle(getScreenPos().x, getScreenPos().y, 50, 120, BLUE);
+    if (IsKeyDown(KEY_A))
+        velocity.x--;
+    if (IsKeyDown(KEY_D))
+        velocity.x++;
+    if (IsKeyDown(KEY_W))
+        velocity.y--;
+    if (IsKeyDown(KEY_S))
+        velocity.y++;
+
+    if (Vector2Length(velocity) != 0)
+    {
+        // set worldPos = worldPos + direction
+        worldPos = Vector2Add(worldPos, Vector2Scale(Vector2Normalize(velocity), speed));
+    }
+    velocity = {};
+
+    DrawRectangle(getScreenPos().x, getScreenPos().y, 50, 120, RED);
 }
