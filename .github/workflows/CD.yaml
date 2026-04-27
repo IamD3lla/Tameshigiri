@@ -80,7 +80,7 @@ jobs:
       - name: Package Game
         run: |
           cd package
-          chmod +x game
+          chmod +x build/game
           zip -r game-linux-${{ github.sha }}.zip .
 
       - name: Upload Final Download Artifact
