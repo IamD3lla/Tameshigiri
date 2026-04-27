@@ -7,7 +7,7 @@ on:
 
 
 jobs:
-  build-and-package:
+  build-and-download:
     name: Build and Package Game
     runs-on: ubuntu-24.04
 
