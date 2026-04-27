@@ -1,0 +1,45 @@
+name: Continuous Integration
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-project:
+    name: Build Project
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v4.2.2
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            cmake g++ make git \
+            libasound2-dev \
+            libx11-dev \
+            libxrandr-dev \
+            libxi-dev \
+            libgl1-mesa-dev \
+            libglu1-mesa-dev \
+            libxcursor-dev \
+            libxinerama-dev
+
+      - name: Install Raylib
+        run: |
+          git clone https://github.com/raysan5/raylib.git
+          cd raylib
+          mkdir build
+          cd build
+          cmake .. -DBUILD_SHARED_LIBS=ON
+          make -j$(nproc)
+          sudo make install
+          sudo ldconfig
+
+      - name: Build Project
+        uses: threeal/cmake-action@v2.1.0
+        with:
+          source-dir: CMakeLists.txt
+          build-dir: build
