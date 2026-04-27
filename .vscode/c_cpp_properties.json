@@ -6,7 +6,8 @@
                 "${workspaceFolder}/src",
                 "/usr/include",
                 "${workspaceFolder}",
-                "${workspaceFolder}/src/player"
+                "${workspaceFolder}/src/player",
+                "${workspaceFolder}/src/player/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/g++",
