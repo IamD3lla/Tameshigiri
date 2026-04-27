@@ -58,7 +58,7 @@ jobs:
       - name: Package Game
         run: |
           mkdir -p dist
-          cp build/Tameshigiri dist/
+          cp build/game dist/
           cp -r assets dist/ || true
           cd dist
           zip -r game-linux.zip .
