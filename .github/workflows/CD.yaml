@@ -5,10 +5,9 @@ on:
     branches:
       - main
 
-
 jobs:
-  build-and-download:
-    name: Build and Package Game
+  build:
+    name: Build Game
     runs-on: ubuntu-24.04
 
     env:
@@ -17,13 +16,6 @@ jobs:
     steps:
       - name: Checkout Project
         uses: actions/checkout@v4.2.2
-
-      # 🔥 Cache do build (acelera muito)
-      - name: Cache Build
-        uses: actions/cache@v4
-        with:
-          path: build
-          key: ${{ runner.os }}-build-${{ hashFiles('**/CMakeLists.txt') }}
 
       - name: Install System Dependencies
         run: |
@@ -41,16 +33,14 @@ jobs:
 
       - name: Install Raylib
         run: |
-          if [ ! -d "raylib" ]; then
-            git clone https://github.com/raysan5/raylib.git
-            cd raylib
-            mkdir build
-            cd build
-            cmake .. -DBUILD_SHARED_LIBS=ON
-            make -j$(nproc)
-            sudo make install
-            sudo ldconfig
-          fi
+          git clone https://github.com/raysan5/raylib.git
+          cd raylib
+          mkdir build
+          cd build
+          cmake .. -DBUILD_SHARED_LIBS=ON
+          make -j$(nproc)
+          sudo make install
+          sudo ldconfig
 
       - name: Configure CMake
         run: cmake -B build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
@@ -61,16 +51,37 @@ jobs:
       - name: Debug Build Output
         run: ls -R build
 
-      - name: Package Game
-        run: |
-          mkdir -p dist
-          cp build/game dist/
-          cp -r assets dist/ || true
-          cd dist
-          zip -r game-${{ github.sha }}.zip .
-
-      - name: Upload Artifact
+      - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Tameshigiri-${{ github.sha }}
-          path: dist/*.zip
+          name: game-build
+          path: |
+            build/game
+            assets/
+
+  download-and-package:
+    name: Download and Package Game
+    runs-on: ubuntu-24.04
+    needs: build
+
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: game-build
+          path: package
+
+      - name: Show Downloaded Files
+        run: ls -R package
+
+      - name: Package Game
+        run: |
+          cd package
+          chmod +x game
+          zip -r game-linux-${{ github.sha }}.zip .
+
+      - name: Upload Final Download Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Tameshigiri-linux
+          path: package/game-linux-${{ github.sha }}.zip
