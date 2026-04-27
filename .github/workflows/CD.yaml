@@ -1,11 +1,13 @@
-name: Continuous Integration
+name: Continuous Deployment
 
 on:
-  pull_request:
+  push:
+    branches:
+      - main
 
 jobs:
-  build-project:
-    name: Build Project
+  build-and-package:
+    name: Build and Package Game
     runs-on: ubuntu-24.04
 
     steps:
@@ -16,7 +18,11 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y \
-            cmake g++ make git \
+            cmake \
+            g++ \
+            make \
+            git \
+            zip \
             libasound2-dev \
             libx11-dev \
             libxrandr-dev \
@@ -40,5 +46,22 @@ jobs:
       - name: Build Project
         uses: threeal/cmake-action@v2.1.0
         with:
-          source-dir: CMakeLists.txt
+          source-dir: .
           build-dir: build
+
+      - name: Debug Build Output
+        run: ls -R build
+
+      - name: Package Game
+        run: |
+          mkdir -p dist
+          cp build/game dist/
+          cp -r assets dist/ || true
+          cd dist
+          zip -r game-linux.zip .
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Tameshigiri-linux
+          path: dist/game-linux.zip
