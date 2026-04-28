@@ -1,0 +1,10 @@
+add_executable(player_tests player_tests.cpp)
+
+target_include_directories(player_tests PRIVATE ${CMAKE_SOURCE_DIR}/src)
+target_link_libraries(player_tests PRIVATE player raylib m)
+
+add_test(NAME player_constructor_centers_player_on_screen COMMAND player_tests constructor_centers_player_on_screen)
+add_test(NAME player_constructor_starts_at_world_origin COMMAND player_tests constructor_starts_at_world_origin)
+add_test(NAME player_horizontal_movement_uses_player_speed COMMAND player_tests horizontal_movement_uses_player_speed)
+add_test(NAME player_zero_movement_does_not_change_position COMMAND player_tests zero_movement_does_not_change_position)
+add_test(NAME player_diagonal_movement_is_normalized COMMAND player_tests diagonal_movement_is_normalized)

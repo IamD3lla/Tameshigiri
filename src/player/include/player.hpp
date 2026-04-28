@@ -12,13 +12,11 @@ public:
 
     // Function responsible for Draw the Player and set worldPos
     void tick(float deltaTime);
+
+    Vector2 getWorldPos() const { return worldPos; }
+    Vector2 getScreenPos() const;
+    void applyMovement(Vector2 direction);
 private:
-    // Function that gets the world Position of the player
-    Vector2 getWorldPos(){return worldPos;};
-
-    // Set the location of the player on the screen
-    Vector2 getScreenPos();
-
     Vector2 worldPos{};
     Vector2 velocity{};
 

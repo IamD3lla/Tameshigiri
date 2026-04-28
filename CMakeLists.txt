@@ -3,6 +3,9 @@ project(Protogame)
 
 # Definir o padrão C++
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+include(CTest)
 
 add_subdirectory(src/player)
 
@@ -20,3 +23,7 @@ target_link_libraries(game PRIVATE raylib GL m pthread dl X11 Xrandr Xi Xcursor 
 
 # Incluir diretório de cabeçalhos
 include_directories(${PROJECT_SOURCE_DIR}/src)
+
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()

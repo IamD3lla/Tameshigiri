@@ -7,9 +7,18 @@ Player::Player(float windowWidth, float windowHeight)
     height = windowHeight / 2;
 }
 
-Vector2 Player::getScreenPos()
+Vector2 Player::getScreenPos() const
 {
     return Vector2{width, height};
+}
+
+void Player::applyMovement(Vector2 direction)
+{
+    if (Vector2Length(direction) != 0)
+    {
+        // set worldPos = worldPos + direction
+        worldPos = Vector2Add(worldPos, Vector2Scale(Vector2Normalize(direction), speed));
+    }
 }
 
 void Player::tick(float deltaTime)
@@ -23,11 +32,7 @@ void Player::tick(float deltaTime)
     if (IsKeyDown(KEY_S))
         velocity.y++;
 
-    if (Vector2Length(velocity) != 0)
-    {
-        // set worldPos = worldPos + direction
-        worldPos = Vector2Add(worldPos, Vector2Scale(Vector2Normalize(velocity), speed));
-    }
+    applyMovement(velocity);
     velocity = {};
 
     DrawRectangle(getScreenPos().x, getScreenPos().y, 50, 120, RED);
