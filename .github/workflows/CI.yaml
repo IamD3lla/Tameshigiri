@@ -2,11 +2,14 @@ name: Continuous Integration
 
 on:
   pull_request:
+    types: [closed]
 
 jobs:
   build-project:
     name: Build Project
     runs-on: ubuntu-24.04
+
+    if: github.event.pull_request.merged == true
 
     steps:
       - name: Checkout Project
@@ -40,5 +43,15 @@ jobs:
       - name: Build Project
         uses: threeal/cmake-action@v2.1.0
         with:
-          source-dir: CMakeLists.txt
+          source-dir: .
           build-dir: build
+
+      - name: Notify Discord
+        if: success()
+        run: |
+          curl -H "Content-Type: application/json" \
+          -X POST \
+          -d "{
+            \"content\": \"✅ PR mergeada com sucesso na branch **${{ github.event.pull_request.base.ref }}**!\n\n📦 Repositório: ${{ github.repository }}\n🔀 PR: #${{ github.event.pull_request.number }} - ${{ github.event.pull_request.title }}\n👤 Autor: ${{ github.event.pull_request.user.login }}\n🔗 Link: ${{ github.event.pull_request.html_url }}\"
+          }" \
+          ${{ secrets.DISCORD_WEBHOOK_URL }}
